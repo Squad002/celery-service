@@ -1,0 +1,4 @@
+Connexion[swagger-ui]==2.7.0
+Python-dotenv==0.15.0
+Flask-Mail==0.9.1
+celery[redis]==5.0.2
