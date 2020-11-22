@@ -1,5 +1,0 @@
-MYSQL_ROOT_PASSWORD=example
-MYSQL_USER=gooutsafe
-MYSQL_PASSWORD=my-secret-pw
-MYSQL_DATABASE=gooutsafe
-DATABASE_URI=mysql+pymysql://gooutsafe:my-secret-pw@127.0.0.1/gooutsafe
