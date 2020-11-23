@@ -2,534 +2,71 @@ openapi: 3.0.2
 info:
   title: API User
   version: "1.0"
-  description: This is the service the manages the user data in the app GoOutSafe
+  description: This is the service that manages the celery tasks in the app GoOutSafe
 servers:
   - url: "https://api.prova/"
     variables: {}
     description: The first server used for the definition of APIs
 paths:
-  /users:
-    get:
-      x-openapi-router-controller: microservice.api.users
-      summary: "Search users"
-      parameters:
-        - in: query
-          name: id
-          required: false
-          description: The id of the user
-          schema:
-            type: integer
-        - in: query
-          name: firstname
-          required: false
-          description: The firstname of the users
-          schema:
-            type: string
-        - in: query
-          name: lastname
-          required: false
-          description: The lastname of the users
-          schema:
-            type: string
-        - in: query
-          name: fiscalcode
-          required: false
-          description: The fiscalcode of the user
-          schema:
-            type: string
-        - in: query
-          name: phonenumber
-          required: false
-          description: The phonenumber of the users
-          schema:
-            type: string
-        - in: query
-          name: email
-          required: false
-          description: The email of the user
-          schema:
-            type: string
-        - in: query
-          name: birthdate
-          required: false
-          description: The birthdate of the users
-          schema:
-            type: string
-      responses:
-        "200":
-          description: "Users list"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/User"
-              example:
-                [
-                  {
-                    "id": 5,
-                    "email": "mariorossi@example.com",
-                    "firstname": "Mario",
-                    "lastname": "Rossi",
-                    "birthdate": "2020-12-31",
-                    "phonenumber": "+39 33133133130",
-                    "fiscalcode": "RSSMAR80A01B519J",
-                  },
-                  {
-                    "id": 7,
-                    "email": "caiomaio@example.com",
-                    "firstname": "Caio",
-                    "lastname": "Maio",
-                    "birthdate": "2020-05-21",
-                    "phonenumber": "+39 33133136541",
-                    "fiscalcode": "CAOMAI80A01B519J",
-                  },
-                ]
-      tags:
-        - "User"
+  /mails:
     post:
-      x-openapi-router-controller: microservice.api.users
-      summary: "Register a new user"
+      x-openapi-router-controller: microservice.api.tasks
+      summary: "Send a mail"
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/User"
-      responses:
-        "201":
-          description: "Created"
-        "409":
-          description: "Already Exist"
-      tags:
-        - "User"
-  /users/{id}:
-    get:
-      x-openapi-router-controller: microservice.api.users
-      operationId: get
-      summary: "Get the user by ID"
-      parameters:
-        - name: id
-          in: path
-          required: true
-          description: The id of the user
-          schema:
-            $ref: "#/components/schemas/User/properties/id"
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/User"
-              example:
-                "id": 5
-                "firstname": "Mario"
-                "lastname": "Rossi"
-                "email": "mariorossi@example.com"
-                "fiscalcode": "RSSMRA20T31H501W"
-                "phonenumber": "+39 33133133130"
-                "birthdate": "2020-12-31"
-        "404":
-          description: "User not found"
-      tags:
-        - "User"
-    patch:
-      x-openapi-router-controller: microservice.api.users
-      operationId: patch
-      summary: "Edit the attributes of the user"
-      parameters:
-        - name: id
-          in: path
-          required: true
-          description: The id of the user
-          schema:
-            $ref: "#/components/schemas/User/properties/id"
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/User"
-            example:
-              "firstname": "Mario"
-              "lastname": "Rossi"
-              "email": "mariorossi@newemail.com"
-              "fiscalcode": "RSSMRA20T31H501W"
-              "phonenumber": "+39 3303303303300"
+              type: object
+              properties:
+                subject:
+                  type: string
+                sender:
+                  type: string
+                recipients:
+                  type: array
+                  items:
+                    type: string
+                html_body:
+                  type: string
+                text_body:
+                  type: string 
       responses:
         "204":
-          description: Resource updated
-        "404":
-          description: "User not found"
+          description: "Sent"
       tags:
-        - "User"
-    delete:
-      x-openapi-router-controller: microservice.api.users
-      operationId: delete
-      summary: "Delete the user"
-      parameters:
-        - name: id
-          in: path
-          required: true
-          description: The id of the user
-          schema:
-            $ref: "#/components/schemas/User/properties/id"
-      responses:
-        "204":
-          description: "User deleted"
-        "404":
-          description: "User not found"
-      tags:
-        - "User"
-
-  /operators:
-    post:
-      x-openapi-router-controller: microservice.api.operators
-      operationId: post
-      summary: "Register a new operator"
-      description: "Register a new operator in the app"
-
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/Operator"
-      responses:
-        "201":
-          description: "Operator created"
-        "409":
-          description: "Already exists"
-      tags:
-        - "Operator"
-
-  /operators/{id}:
-    get:
-      summary: "Get the operator specified by ID"
-      x-openapi-router-controller: microservice.api.operators
-      operationId: get
-      parameters:
-        - name: id
-          in: path
-          required: true
-          description: The id of the operator
-          schema:
-            $ref: "#/components/schemas/Operator/properties/id"
-      responses:
-        "200":
-          description: "Operator information"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Operator"
-              example:
-                "id": 5,
-                "email": "mariorossi@example.com"
-                "firstname": "Mario"
-                "lastname": "Rossi"
-                "birthdate": "2020-12-31"
-                "phonenumber": "+39 33133133130"
-                "fiscalcode": "RSSMAR80A01B519J"
-        "404":
-          description: "Operator not found"
-      tags:
-        - "Operator"
-    patch:
-      summary: "Edit the attributes of the operator"
-      x-openapi-router-controller: microservice.api.operators
-      operationId: patch
-      parameters:
-        - name: id
-          in: path
-          required: true
-          description: The id of the operator
-          schema:
-            $ref: "#/components/schemas/Operator/properties/id"
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/Operator"
-            example:
-              "email": "mariorossi@example.com"
-              "firstname": "Mario"
-              "lastname": "Rossi"
-              "birthdate": "2020-12-31"
-              "phonenumber": "+39 33133133130"
-              "fiscalcode": "Rossi"
-      responses:
-        "204":
-          description: "Operator information modified"
-        "404":
-          description: "Operator not found"
-      tags:
-        - "Operator"
-    delete:
-      summary: "Delete the operator"
-      x-openapi-router-controller: microservice.api.operators
-      operationId: delete
-      description: "Operator"
-      parameters:
-        - name: id
-          in: path
-          required: true
-          description: The id of the operator
-          schema:
-            $ref: "#/components/schemas/Operator/properties/id"
-      responses:
-        "204":
-          description: "Operator deleted"
-        "404":
-          description: "Operator not found"
-      tags:
-        - "Operator"
-
-  /authorities:
-    post:
-      summary: "Register a new health authority"
-      description: "Register a new authority in the app"
-      x-openapi-router-controller: microservice.api.authorities
-      operationId: post
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/HealthAuthority"
-      responses:
-        "201":
-          description: "Health authority created"
-        "409":
-          description: "Already Exist"
-      tags:
-        - "Health Authority"
-  /authorities/{id}/mark:
-    post:
-      summary: "Mark an user"
-      description: "Mark a user through one of the following identifiers: phone number, email, or fiscal code."
-      x-openapi-router-controller: microservice.api.authorities
-      operationId: mark
-      parameters:
-        - name: id
-          in: path
-          required: true
-          description: The id of the health authority
-          schema:
-            $ref: "#/components/schemas/HealthAuthority/properties/id"
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/Mark"
-            examples:
-              "Phone number":
-                value:
-                  "identifier": "+39 3313313310"
-                  "duration": 10
-              "Fiscal code":
-                value:
-                  "identifier": "MARRSS84F08K555L"
-                  "duration": 15
-              "Email":
-                value:
-                  "identifier": "mariorossi@example.com"
-                  "duration": 7
-      responses:
-        "204":
-          description: "Marked"
-        "404":
-          description: "User not found"
-      tags:
-        - "Health Authority"
-
-  /authorities/trace:
-    get:
-      summary: "Trace an user"
-      description: "Trace the list of users that have been in contact with a positive."
-      x-openapi-router-controller: microservice.api.authorities
-      operationId: get
-      responses:
-        "200":
-          description: "List of traced users"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/HealthAuthority"
-              example:
-                [
-                  {
-                    "date": "2020-12-05",
-                    "people":
-                      [
-                        {
-                          "email": "mariorossi@example.com",
-                          "firstname": "Mario",
-                          "lastname": "Rossi",
-                          "birthdate": "2020-12-31",
-                          "phonenumber": "+39 33133133130",
-                          "fiscalcode": "Rossi",
-                        },
-                      ],
-                  },
-                ]
-        "404":
-          description: "Operator not found"
-      tags:
-        - "Health Authority"
+        - "Mail"
 
 components:
   schemas:
-    User:
+    Mail:
+      required:
+        - subject
+        - recipients
+        - text_body
       type: object
       properties:
-        id:
-          type: integer
-          description: Unique identifier
-          readOnly: true
-          example: 5
-        firstname:
+        subject:
           type: string
-          description: The first name of the user
+          description: "The subject of the mail"
           maxLength: 128
-          example: "Mario"
-        lastname:
+          example: "Covid info"
+        recipients:
+          type: array
+          items:
+            type: string
+            description: "The mail recipients"
+            example: ["Gino Pipino", "Diego Abatantuono"]
+        text_body:
           type: string
-          description: The last name of the user
+          description: "The text body of the mail"
           maxLength: 128
-          example: "Rossi"
-        email:
+          example: "You are infected! Prepare to die"
+        html_body:
           type: string
-          description: The email of the user
-          maxLength: 128
-          example: "mariorossi@example.com"
-        password:
+          description: "The html body of the mail"
+          example: "<h1>Nice</h1>"
+        sender:
           type: string
-          description: The password of the user
-          maxLength: 128
-          example: "ekjc39rf$nj"
-        fiscalcode:
-          type: string
-          description: The fiscal code of the user
-          maxLength: 128
-          example: "RSSMRA20T31H501W"
-        phonenumber:
-          type: string
-          description: The phone number of the user
-          maxLength: 40
-          example: "+39 33133133130"
-        birthdate:
-          type: string
-          description: The date of birth of the user
-          example: "2020-12-31"
-        marked:
-          type: boolean
-          description: "Flag for positiveness to COVID-19"
-          example: true
-    Operator:
-      type: object
-      properties:
-        id:
-          type: integer
-          description: "Unique identifier"
-          readOnly: true
-          example: 5
-        password:
-          type: string
-          description: "The password of the operator"
-          maxLength: 128
-        email:
-          type: string
-          description: "The email of the operator"
-          maxLength: 128
-          example: "mariorossi@example.com"
-        firstname:
-          type: string
-          description: "The first name of the operator"
-          maxLength: 128
-          example: "Mario"
-        lastname:
-          type: string
-          description: "The last name of the operator"
-          maxLength: 128
-          example: "Rossi"
-        birthdate:
-          type: string
-          description: "The date of birth of the operator"
-          example: "2020-12-31"
-        phonenumber:
-          type: string
-          description: "The phone number of the operator"
-          maxLength: 40
-          example: "+39 33133133130"
-        fiscalcode:
-          type: string
-          description: "The fiscal code of the operator"
-          maxLength: 128
-          example: "Rossi"
-    HealthAuthority:
-      type: object
-      properties:
-        id:
-          type: integer
-          description: Unique identifier
-          readOnly: true
-          example: 1
-        email:
-          type: string
-          description: Email of the Health Authority
-          maxLength: 128
-          example: authority@gmail.com
-        name:
-          type: string
-          description: Name of the Health Authority
-          maxLength: 128
-          example: ASL Pisa
-        password:
-          type: string
-          description: Password of the Health Authority account
-          maxLength: 128
-          example: password
-        phone:
-          type: string
-          description: The phone number of the Health Authority
-          maxLength: 40
-          example: +39 33133133130
-        country:
-          type: string
-          description: The country where the Health Authority resides
-          maxLength: 128
-          example: Italy
-        state:
-          type: string
-          description: The state where the Health Authority resides
-          maxLength: 128
-          example: Tuscany
-        city:
-          type: string
-          description: The city where the Health Authority resides
-          maxLength: 128
-          example: Pisa
-        lat:
-          type: number
-          description: Latitude of the Health Authority
-          maxLength: 40
-          example: 324234.32
-        lon:
-          type: number
-          description: Longitude of the Health Authority
-          maxLength: 40
-          example: 324234.32
-    Mark:
-      type: object
-      properties:
-        identifier:
-          type: string
-          description: Unique identifier
-          example: "+39 3313313310"
-        duration:
-          type: number
-          description: The amount of days the mark must last
-          minimum: 1
-          maximum: 60
-          example: "10"
+          description: "The sender of the mail"
+          example: "Pippo Puppo"

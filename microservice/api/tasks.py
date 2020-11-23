@@ -1,4 +1,5 @@
 from flask_mail import Message
+from connexion import request
 from microservice import celery as app
 from microservice import mail
 from typing import List
@@ -41,21 +42,34 @@ def compute_restaurants_rating_average():
             average_rating /= len(reviews)
             restaurant.average_rating = average_rating
 
-    db.session.commit()
+    #db.session.commit()
 
 
 # send_email("GoOutSafe - Notification", ["gooutsafe.squad2@gmail.com"],
 # "Not a good news", "Not a good news (when you can render html)")
-@app.task
-def send_email(
+""" def send_email(
     subject,
     recipients: List[str],
     text_body,
     html_body=None,
     sender=Config.MAIL_SENDER,
     attachments=None,
-):
+): """
+@app.task
+def post():
     # TODO add logger info
+    # TODO attachment
+
+    # mandatory
+    data = request.json
+    subject = data["subject"]
+    recipients = data["recipients"]
+    text_body = data["text_body"]
+
+    #optional
+    html_body = dict.get("html_body", None)
+    sender = dict.get("sender", Config.MAIL_SENDER)
+
     msg = Message(subject, sender=sender, recipients=recipients)
     msg.body = text_body
     msg.html = html_body if html_body else text_body

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 source venv/bin/activate
 export FLASK_APP="app"
 
@@ -11,4 +11,4 @@ while true; do
     sleep 5
 done
 
-exec celery -A gooutsafe.celery worker -l DEBUG -E -B
+exec celery -A app.celery worker -l DEBUG -E -B

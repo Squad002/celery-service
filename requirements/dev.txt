@@ -1,3 +1,4 @@
 -r common.txt
 black==20.8b1
 flake8==3.8.4
+Connexion[swagger-ui]==2.7.0

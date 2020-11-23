@@ -29,7 +29,7 @@ def create_app(config_name, updated_variables=None):
     context.push()
 
     celery.conf.update(flask_app.config)
-    mail.init_app(app)
+    mail.init_app(flask_app)
 
     # Load APIs
     connexion_app.add_api("openapi.yml", resolver=RestyResolver("microservice.api"))

@@ -15,6 +15,11 @@
     export FLASK_ENV=development
     flask run
 
+    # Start Server mail
+    python -m smtpd -n -c DebuggingServer localhost:8025
+    # Start Redis
+    docker run --name redis -p 6379:6379 redis
+
 ### Docker Image
     docker build -t celery-service:latest . 
     docker run -p 5000:5000 celery-service 
