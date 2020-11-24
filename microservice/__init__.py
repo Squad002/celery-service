@@ -1,9 +1,9 @@
+import connexion
 from connexion.resolver import RestyResolver
+from celery import Celery
 from flask_mail import Mail
 from config import config, Config
-from celery import Celery
 
-import connexion
 
 mail = Mail()
 celery = Celery(
@@ -14,15 +14,12 @@ celery = Celery(
 celery.autodiscover_tasks(["microservice.api.tasks"], force=True)
 
 
-def create_app(config_name, updated_variables=None):
+def create_app(config_name):
     connexion_app = connexion.App(__name__, specification_dir="../")
 
     # Get the underlying Flask app instance and put config in it
     flask_app = connexion_app.app
     flask_app.config.from_object(config[config_name])
-
-    if updated_variables:
-        flask_app.config.update(updated_variables)
 
     config[config_name].init_app(flask_app)
     context = flask_app.app_context()

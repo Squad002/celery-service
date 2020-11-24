@@ -7,7 +7,7 @@ ENV PYTHONUNBUFFERED=1
 
 # Create non-root user and home folder
 RUN useradd -m gooutsafe
-WORKDIR /home/gooutsafe
+WORKDIR /home/gooutsafe/celery-service
 
 # Install dependencies
 COPY requirements/ requirements/

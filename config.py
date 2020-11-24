@@ -11,6 +11,7 @@ class Config:
     SECRET_KEY = os.environ.get("SECRET_KEY") or "top secret"
 
     CELERY_BROKER_URL = os.environ.get("CELERY_BROKER_URL") or "redis://localhost:6379/0"
+    # TODO fix deprecation
     CELERY_RESULT_BACKEND = (
         os.environ.get("CELERY_RESULT_BACKEND") or "redis://localhost:6379/0"
     )
@@ -22,6 +23,8 @@ class Config:
     MAIL_USERNAME = os.environ.get("MAIL_USERNAME") or None
     MAIL_PASSWORD = os.environ.get("MAIL_PASSWORD") or None
     MAIL_SENDER = os.environ.get("MAIL_SENDER") or "no-reply@gooutsafe.com"
+
+    URL_API_RESTAURANT = os.environ.get("URL_API_RESTAURANT") or "http://localhost:9000"
 
     @staticmethod
     def init_app(app):
@@ -46,9 +49,6 @@ class DevelopmentConfig(Config):
 
 class TestingConfig(Config):
     TESTING = True
-    SQLALCHEMY_DATABASE_URI = (
-        os.environ.get("TEST_DATABASE_URL") or "sqlite:///gooutsafe_test.db"
-    )
 
 
 class DockerConfig(ProductionConfig):

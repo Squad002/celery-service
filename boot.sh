@@ -11,4 +11,6 @@ while true; do
     sleep 5
 done
 
-exec celery -A app.celery worker -l DEBUG -E -B
+python -m smtpd -n -c DebuggingServer localhost:8025 &
+celery -A app.celery worker -l DEBUG -E -B &
+exec gunicorn -b 0.0.0.0:5000 --access-logfile - --error-logfile - app:app 
