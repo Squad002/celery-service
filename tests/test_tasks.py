@@ -1,10 +1,11 @@
 from tests.fixtures import app, client
+from flask import current_app
 from microservice.api.tasks import compute_restaurants_rating_average
+import requests
 
-#TODO fix import errors
 
 def test_send_mail(client):
-    res = client.post("/emails", json=mail)
+    res = client.post("/mails", json=mail)
 
     assert res.status_code == 204
     # TODO verify mail
@@ -37,19 +38,19 @@ def test_average_rating(client):
 
     compute_restaurants_rating_average()
 
-    requests.get(
-        f"{current_app.config['URL_API_RESTAURANTS']}/restaurants/1",
+    updated = requests.get(
+        f"{current_app.config['URL_API_RESTAURANT']}/restaurants/1",
         timeout=(3.05, 9.1),
-    )
+    ).json()
     
-    assert requests.json["average_rating"] == 4
+    assert updated["average_rating"] == 4
 
 
 mail = dict(
     html_body="<h1>Nice</h1>",
     recipients=[
       "gino@mail.com"
-    ]
+    ],
     sender="prova@mail.com",
     subject="Covid info",
     text_body="You are infected! Prepare to die"

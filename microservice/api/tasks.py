@@ -4,6 +4,9 @@ from microservice import celery as app
 from microservice import mail
 from typing import List
 from config import Config
+from flask import current_app
+
+import requests
 
 """
     Just as a reference
@@ -31,18 +34,24 @@ def setup_periodic_tasks(sender, **kwargs):
 def compute_restaurants_rating_average():
     # TODO this needs to call the restaurant service
     # TODO it should have a timeout
-    # restaurants = db.session.query(Restaurant).all()
-    restaurants = []
+    restaurants = requests.get(
+        f"{current_app.config['URL_API_RESTAURANT']}/restaurants",
+        timeout=(3.05, 9.1),
+    ).json()
 
     for restaurant in restaurants:
-        reviews = restaurant.reviews
-        average_rating = sum(review.rating for review in reviews)
+        reviews = restaurant["reviews"]
+        average_rating = sum(review["rating"] for review in reviews)
         num_reviews = len(reviews)
         if num_reviews > 0:
             average_rating /= len(reviews)
-            restaurant.average_rating = average_rating
+            restaurant["average_rating"] = average_rating
 
-    #db.session.commit()
+            requests.patch(
+                f"{current_app.config['URL_API_RESTAURANT']}/restaurants/{restaurant['id']}",
+                timeout=(3.05, 9.1),
+                json={"average_rating" : average_rating}
+            )
 
 
 # send_email("GoOutSafe - Notification", ["gooutsafe.squad2@gmail.com"],
