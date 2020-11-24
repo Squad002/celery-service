@@ -17,20 +17,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                subject:
-                  type: string
-                sender:
-                  type: string
-                recipients:
-                  type: array
-                  items:
-                    type: string
-                html_body:
-                  type: string
-                text_body:
-                  type: string 
+              $ref: "#/components/schemas/Mail"
       responses:
         "204":
           description: "Sent"
@@ -56,7 +43,7 @@ components:
           items:
             type: string
             description: "The mail recipients"
-            example: ["Gino Pipino", "Diego Abatantuono"]
+            example: gino@mail.com
         text_body:
           type: string
           description: "The text body of the mail"

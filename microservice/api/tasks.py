@@ -67,8 +67,9 @@ def post():
     text_body = data["text_body"]
 
     #optional
-    html_body = dict.get("html_body", None)
-    sender = dict.get("sender", Config.MAIL_SENDER)
+    html_body = data.get("html_body", None)
+    sender = data.get("sender", Config.MAIL_SENDER)
+    attachments = data.get("attachments", None)
 
     msg = Message(subject, sender=sender, recipients=recipients)
     msg.body = text_body
