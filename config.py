@@ -10,7 +10,9 @@ fileHandler.setFormatter(
 class Config:
     SECRET_KEY = os.environ.get("SECRET_KEY") or "top secret"
 
-    CELERY_BROKER_URL = os.environ.get("CELERY_BROKER_URL") or "redis://localhost:6379/0"
+    CELERY_BROKER_URL = (
+        os.environ.get("CELERY_BROKER_URL") or "redis://localhost:6379/0"
+    )
     # TODO fix deprecation
     CELERY_RESULT_BACKEND = (
         os.environ.get("CELERY_RESULT_BACKEND") or "redis://localhost:6379/0"
@@ -24,7 +26,9 @@ class Config:
     MAIL_PASSWORD = os.environ.get("MAIL_PASSWORD") or None
     MAIL_SENDER = os.environ.get("MAIL_SENDER") or "no-reply@gooutsafe.com"
 
-    URL_API_RESTAURANT = os.environ.get("URL_API_RESTAURANT") or "http://localhost:5001"
+    URL_API_RESTAURANT = (
+        os.environ.get("URL_API_RESTAURANT") or "http://localhost:5001/"
+    )
 
     @staticmethod
     def init_app(app):
