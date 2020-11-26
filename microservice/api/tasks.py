@@ -35,7 +35,7 @@ def compute_restaurants_rating_average():
     # TODO this needs to call the restaurant service
     # TODO it should have a timeout
     restaurants = requests.get(
-        f"{current_app.config['URL_API_RESTAURANT']}/restaurants",
+        f"{current_app.config['URL_API_RESTAURANT']}restaurants",
         timeout=(3.05, 9.1),
     ).json()
 
@@ -48,9 +48,9 @@ def compute_restaurants_rating_average():
             restaurant["average_rating"] = average_rating
 
             requests.patch(
-                f"{current_app.config['URL_API_RESTAURANT']}/restaurants/{restaurant['id']}",
+                f"{current_app.config['URL_API_RESTAURANT']}restaurants/{restaurant['id']}",
                 timeout=(3.05, 9.1),
-                json={"average_rating" : average_rating}
+                json={"average_rating": average_rating},
             )
 
 
@@ -64,6 +64,8 @@ def compute_restaurants_rating_average():
     sender=Config.MAIL_SENDER,
     attachments=None,
 ): """
+
+
 @app.task
 def post():
     # TODO add logger info
@@ -75,7 +77,7 @@ def post():
     recipients = data["recipients"]
     text_body = data["text_body"]
 
-    #optional
+    # optional
     html_body = data.get("html_body", None)
     sender = data.get("sender", Config.MAIL_SENDER)
     attachments = data.get("attachments", None)

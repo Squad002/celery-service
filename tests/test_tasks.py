@@ -13,25 +13,25 @@ def test_send_mail(client):
 
 def test_average_rating(client):
     requests.post(
-        f"{current_app.config['URL_API_RESTAURANT']}/restaurants",
+        f"{current_app.config['URL_API_RESTAURANT']}restaurants",
         json=restaurant,
         timeout=(3.05, 9.1),
     )
 
     requests.post(
-        f"{current_app.config['URL_API_RESTAURANT']}/reviews",
+        f"{current_app.config['URL_API_RESTAURANT']}reviews",
         json=review,
         timeout=(3.05, 9.1),
     )
 
     requests.post(
-        f"{current_app.config['URL_API_RESTAURANT']}/reviews",
+        f"{current_app.config['URL_API_RESTAURANT']}reviews",
         json=review2,
         timeout=(3.05, 9.1),
     )
 
     requests.post(
-        f"{current_app.config['URL_API_RESTAURANT']}/reviews",
+        f"{current_app.config['URL_API_RESTAURANT']}reviews",
         json=review3,
         timeout=(3.05, 9.1),
     )
@@ -39,21 +39,19 @@ def test_average_rating(client):
     compute_restaurants_rating_average()
 
     updated = requests.get(
-        f"{current_app.config['URL_API_RESTAURANT']}/restaurants/1",
+        f"{current_app.config['URL_API_RESTAURANT']}restaurants/1",
         timeout=(3.05, 9.1),
     ).json()
-    
+
     assert updated["average_rating"] == 4
 
 
 mail = dict(
     html_body="<h1>Nice</h1>",
-    recipients=[
-      "gino@mail.com"
-    ],
+    recipients=["gino@mail.com"],
     sender="prova@mail.com",
     subject="Covid info",
-    text_body="You are infected! Prepare to die"
+    text_body="You are infected! Prepare to die",
 )
 
 restaurant = dict(
