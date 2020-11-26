@@ -24,7 +24,7 @@ class Config:
     MAIL_PASSWORD = os.environ.get("MAIL_PASSWORD") or None
     MAIL_SENDER = os.environ.get("MAIL_SENDER") or "no-reply@gooutsafe.com"
 
-    URL_API_RESTAURANT = os.environ.get("URL_API_RESTAURANT") or "http://localhost:5001"
+    URL_API_RESTAURANT = os.environ.get("URL_API_RESTAURANT") or "http://localhost:5003"
 
     @staticmethod
     def init_app(app):
